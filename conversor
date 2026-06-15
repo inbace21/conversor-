@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Unidades - S.I.</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .converter-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .conversion-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .conversion-col {
+            flex: 1;
+        }
+
+        .equals {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="converter-card">
+        <h1>Conversor del Sistema Internacional</h1>
+        
+        <div class="form-group">
+            <label for="magnitude">Magnitud:</label>
+            <select id="magnitude"></select>
+        </div>
+
+        <div class="conversion-row">
+            <div class="conversion-col">
+                <label for="input-value">De:</label>
+                <input type="number" id="input-value" value="1" step="any">
+                <select id="unit-from"></select>
+            </div>
+            
+            <div class="equals">=</div>
+
+            <div class="conversion-col">
+                <label for="output-value">A:</label>
+                <input type="number" id="output-value" readonly>
+                <select id="unit-to"></select>
+            </div>
+        </div>
+
+        <footer>
+            Trabajo de Aplicación - Tema 1: Sistema internacional de medidas
+        </footer>
+    </div>
+
+    <script>
+        // Diccionario de conversiones referenciadas a una unidad base
+        const conversionData = {
+            "Masa": {
+                "Ton": 1000,
+                "Kg": 1,
+                "g": 0.001,
+                "mg": 0.000001,
+                "ug": 0.000000001
+            },
+            "Volumen": {
+                "Gal": 3.78541,
+                "m³": 1000,
+                "L": 1,
+                "mL": 0.001,
+                "uL": 0.000001
+            },
+            "Distancia": {
+                "km": 1000,
+                "m": 1,
+                "cm": 0.01,
+                "mm": 0.001,
+                "Yarda": 0.9144,
+                "pulgada": 0.0254
+            },
+            "Densidad": {
+                "Kg/m³": 1,
+                "g/mL": 1000,
+                "Kg/L": 1000,
+                "g/L": 1
+            },
+            "Presión": {
+                "Atm": 101325,
+                "Pa": 1,
+                "mmHg": 133.322,
+                "Torr": 133.322,
+                "psi": 6894.76
+            },
+            "Tiempo": {
+                "hora": 3600,
+                "min": 60,
+                "s": 1
+            },
+            "Fuerza": {
+                "Kilonewton": 1000,
+                "Newton": 1,
+                "Micronewton": 0.000001,
+                "Kilogramofuerza": 9.80665,
+                "Dina": 0.00001
+            },
+            "Energía": {
+                "Kcal": 4.184,
+                "KJ": 1
+            }
+        };
+
+        const magnitudeSelect = document.getElementById('magnitude');
+        const unitFromSelect = document.getElementById('unit-from');
+        const unitToSelect = document.getElementById('unit-to');
+        const inputValue = document.getElementById('input-value');
+        const outputValue = document.getElementById('output-value');
+
+        // Inicializar magnitudes
+        function init() {
+            for (const mag in conversionData) {
+                const option = document.createElement('option');
+                option.value = mag;
+                option.textContent = mag;
+                magnitudeSelect.appendChild(option);
+            }
+            populateUnits();
+            calculate();
+        }
+
+        // Llenar los selects de unidades dependiendo de la magnitud seleccionada
+        function populateUnits() {
+            const selectedMag = magnitudeSelect.value;
+            const units = Object.keys(conversionData[selectedMag]);
+            
+            unitFromSelect.innerHTML = '';
+            unitToSelect.innerHTML = '';
+
+            units.forEach((unit, index) => {
+                const option1 = document.createElement('option');
+                option1.value = unit;
+                option1.textContent = unit;
+                unitFromSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = unit;
+                option2.textContent = unit;
+                // Seleccionar una unidad diferente para el destino por defecto si es posible
+                if (index === 1 && units.length > 1) option2.selected = true; 
+                unitToSelect.appendChild(option2);
+            });
+        }
+
+        // Realizar el cálculo
+        function calculate() {
+            const mag = magnitudeSelect.value;
+            const fromUnit = unitFromSelect.value;
+            const toUnit = unitToSelect.value;
+            const val = parseFloat(inputValue.value);
+
+            if (isNaN(val)) {
+                outputValue.value = '';
+                return;
+            }
+
+            const fromFactor = conversionData[mag][fromUnit];
+            const toFactor = conversionData[mag][toUnit];
+
+            // Formula: (Valor * FactorUnidadOrigen) / FactorUnidadDestino
+            let result = (val * fromFactor) / toFactor;
+
+            // Formatear el resultado para evitar números excesivamente largos
+            // Si el número es muy pequeño o muy grande, usar notación científica
+            if (result !== 0 && (result < 0.000001 || result > 999999999)) {
+                outputValue.value = result.toExponential(6);
+            } else {
+                // Redondear a máximo 6 decimales para mantenerlo limpio
+                outputValue.value = parseFloat(result.toFixed(6)); 
+            }
+        }
+
+        // Event Listeners
+        magnitudeSelect.addEventListener('change', () => {
+            populateUnits();
+            calculate();
+        });
+
+        unitFromSelect.addEventListener('change', calculate);
+        unitToSelect.addEventListener('change', calculate);
+        inputValue.addEventListener('input', calculate);
+
+        // Arrancar la app
+        init();
+    </script>
+</body>
+</html>
