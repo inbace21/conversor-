@@ -88,6 +88,50 @@
             margin-top: 1.5rem;
         }
 
+        /* --- NUEVOS ESTILOS PARA LA LISTA DINÁMICA --- */
+        .unit-info-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .unit-info-container h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .unit-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .unit-list li {
+            background-color: var(--background);
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .unit-name {
+            color: var(--text-muted);
+        }
+
+        .unit-symbol {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
         footer {
             margin-top: 2rem;
             text-align: center;
@@ -122,65 +166,56 @@
             </div>
         </div>
 
+        <div class="unit-info-container">
+            <h3>Unidades Disponibles:</h3>
+            <ul class="unit-list" id="unit-list">
+                </ul>
+        </div>
+
         <footer>
             Trabajo de Aplicación - Tema 1: Sistema internacional de medidas
         </footer>
     </div>
 
     <script>
-        // Diccionario de conversiones referenciadas a una unidad base
+        // Diccionario de conversiones
         const conversionData = {
             "Masa": {
-                "Ton": 1000,
-                "Kg": 1,
-                "g": 0.001,
-                "mg": 0.000001,
-                "ug": 0.000000001
+                "Ton": 1000, "Kg": 1, "g": 0.001, "mg": 0.000001, "ug": 0.000000001
             },
             "Volumen": {
-                "Gal": 3.78541,
-                "m³": 1000,
-                "L": 1,
-                "mL": 0.001,
-                "uL": 0.000001
+                "Gal": 3.78541, "m³": 1000, "L": 1, "mL": 0.001, "uL": 0.000001
             },
             "Distancia": {
-                "km": 1000,
-                "m": 1,
-                "cm": 0.01,
-                "mm": 0.001,
-                "Yarda": 0.9144,
-                "pulgada": 0.0254
+                "km": 1000, "m": 1, "cm": 0.01, "mm": 0.001, "Yarda": 0.9144, "pulgada": 0.0254
             },
             "Densidad": {
-                "Kg/m³": 1,
-                "g/mL": 1000,
-                "Kg/L": 1000,
-                "g/L": 1
+                "Kg/m³": 1, "g/mL": 1000, "Kg/L": 1000, "g/L": 1
             },
             "Presión": {
-                "Atm": 101325,
-                "Pa": 1,
-                "mmHg": 133.322,
-                "Torr": 133.322,
-                "psi": 6894.76
+                "Atm": 101325, "Pa": 1, "mmHg": 133.322, "Torr": 133.322, "psi": 6894.76
             },
             "Tiempo": {
-                "hora": 3600,
-                "min": 60,
-                "s": 1
+                "hora": 3600, "min": 60, "s": 1
             },
             "Fuerza": {
-                "Kilonewton": 1000,
-                "Newton": 1,
-                "Micronewton": 0.000001,
-                "Kilogramofuerza": 9.80665,
-                "Dina": 0.00001
+                "Kilonewton": 1000, "Newton": 1, "Micronewton": 0.000001, "Kilogramofuerza": 9.80665, "Dina": 0.00001
             },
             "Energía": {
-                "Kcal": 4.184,
-                "KJ": 1
+                "Kcal": 4.184, "KJ": 1
             }
+        };
+
+        // --- NUEVO: Diccionario para los nombres completos ---
+        const unitNames = {
+            "Ton": "Tonelada", "Kg": "Kilogramo", "g": "Gramo", "mg": "Miligramo", "ug": "Microgramo",
+            "Gal": "Galón", "m³": "Metro cúbico", "L": "Litro", "mL": "Mililitro", "uL": "Microlitro",
+            "km": "Kilómetro", "m": "Metro", "cm": "Centímetro", "mm": "Milímetro", "Yarda": "Yarda", "pulgada": "Pulgada",
+            "Kg/m³": "Kilogramo / metro³", "g/mL": "Gramo / mililitro", "Kg/L": "Kilogramo / litro", "g/L": "Gramo / litro",
+            "Atm": "Atmósfera", "Pa": "Pascal", "mmHg": "Milímetro de mercurio", "Torr": "Torr", "psi": "Libra / pulgada²",
+            "hora": "Hora", "min": "Minuto", "s": "Segundo",
+            "Kilonewton": "Kilonewton", "Newton": "Newton", "Micronewton": "Micronewton", "Kilogramofuerza": "Kilogramo-fuerza", "Dina": "Dina",
+            "Kcal": "Kilocaloría", "KJ": "Kilojoule"
         };
 
         const magnitudeSelect = document.getElementById('magnitude');
@@ -188,6 +223,7 @@
         const unitToSelect = document.getElementById('unit-to');
         const inputValue = document.getElementById('input-value');
         const outputValue = document.getElementById('output-value');
+        const unitListContainer = document.getElementById('unit-list'); // Selector de la nueva lista
 
         // Inicializar magnitudes
         function init() {
@@ -201,15 +237,17 @@
             calculate();
         }
 
-        // Llenar los selects de unidades dependiendo de la magnitud seleccionada
+        // Llenar los selects de unidades y actualizar la lista de información
         function populateUnits() {
             const selectedMag = magnitudeSelect.value;
             const units = Object.keys(conversionData[selectedMag]);
             
             unitFromSelect.innerHTML = '';
             unitToSelect.innerHTML = '';
+            unitListContainer.innerHTML = ''; // Limpiar la lista inferior
 
             units.forEach((unit, index) => {
+                // Llenar selects
                 const option1 = document.createElement('option');
                 option1.value = unit;
                 option1.textContent = unit;
@@ -218,9 +256,18 @@
                 const option2 = document.createElement('option');
                 option2.value = unit;
                 option2.textContent = unit;
-                // Seleccionar una unidad diferente para el destino por defecto si es posible
                 if (index === 1 && units.length > 1) option2.selected = true; 
                 unitToSelect.appendChild(option2);
+
+                // --- NUEVO: Crear las tarjetas de información de unidades ---
+                const li = document.createElement('li');
+                const fullName = unitNames[unit] || unit; // Obtiene el nombre o usa el símbolo si no lo encuentra
+                
+                li.innerHTML = `
+                    <span class="unit-symbol">${unit}</span>
+                    <span class="unit-name">${fullName}</span>
+                `;
+                unitListContainer.appendChild(li);
             });
         }
 
@@ -239,15 +286,11 @@
             const fromFactor = conversionData[mag][fromUnit];
             const toFactor = conversionData[mag][toUnit];
 
-            // Formula: (Valor * FactorUnidadOrigen) / FactorUnidadDestino
             let result = (val * fromFactor) / toFactor;
 
-            // Formatear el resultado para evitar números excesivamente largos
-            // Si el número es muy pequeño o muy grande, usar notación científica
             if (result !== 0 && (result < 0.000001 || result > 999999999)) {
                 outputValue.value = result.toExponential(6);
             } else {
-                // Redondear a máximo 6 decimales para mantenerlo limpio
                 outputValue.value = parseFloat(result.toFixed(6)); 
             }
         }
