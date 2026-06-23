@@ -14,7 +14,7 @@
             --border-color: #e2e8f0;
         }
 
-        body {
+       body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-main);
             display: flex;
@@ -24,16 +24,23 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-
-            /* --- AQUÍ VAN LOS CAMBIOS PARA LA IMAGEN --- */
             background-color: var(--background); 
+        }
+
+        /* ✨ TRUCO PARA EL CELULAR: Capa fija para el fondo sin errores visuales ✨ */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Se asegura de quedar detrás de la tarjeta */
             background-image: url('https://s1.significados.com/foto/naturaleza-bosque-lago-cke.jpg?class=article'); 
             background-size: cover; 
             background-position: center; 
-            background-repeat: no-repeat; 
-            background-attachment: fixed; 
+            background-repeat: no-repeat;
         }
-
         .converter-card {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 2rem;
