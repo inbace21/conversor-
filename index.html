@@ -9,8 +9,7 @@
     
     <style>
         :root {
-            --primary-color: #60a5fa; /* Un azul un poco más claro para que resalte en fondo negro */
-            --background: #0f172a;
+            --primary-color: #60a5fa;
             --text-main: #ffffff;
             --text-muted: #cbd5e1;
             --border-color: #475569;
@@ -42,50 +41,49 @@
             background-repeat: no-repeat;
         }
 
-       /* --- ESTILO DE MARCO ELEGANTE (DIPLOMA) --- */
+        /* --- ESTILO DE MARCO ELEGANTE --- */
         .converter-card {
-            background-color: #0d1117; /* Fondo oscuro casi negro */
+            background-color: #0d1117;
             padding: 2.5rem;
-            
-            /* Bordes tipo diploma */
-            border: 3px solid #c5a059; /* Borde exterior dorado */
-            outline: 1px solid #c5a059; /* Línea interna dorada */
-            outline-offset: -8px;      /* Desplaza la línea interna para el efecto doble */
-            
+            border: 3px solid #c5a059;
+            outline: 1px solid #c5a059;
+            outline-offset: -8px;
             width: 100%;
             max-width: 600px;
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            position: relative; /* Importante para posicionar adornos */
+            position: relative;
         }
         
-    /* Esto controla ambas estrellas al mismo tiempo */
-.converter-card::before, 
-.converter-card::after {
-    content: "✦";
-    position: absolute;
-    left: 20px; /* Ajusta aquí la posición a la izquierda */
-    color: #c5a059;
-    font-size: 1.5rem;
-}
+        /* Estrellas decorativas */
+        .converter-card::before, 
+        .converter-card::after {
+            content: "✦";
+            position: absolute;
+            left: 15px; 
+            color: #c5a059;
+            font-size: 1.5rem;
+        }
+        .converter-card::before { top: 10px; }
+        .converter-card::after { bottom: 10px; }
 
-/* Posición específica para cada una */
-.converter-card::before {
-    top: 10px; /* Estrella superior */
-}
-
-.converter-card::after {
-    bottom: 10px; /* Estrella inferior */
-}
-        /* ------------------------------------------- */
+        /* Estilo para el GIF local */
+        .corner-gif {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            z-index: 1000;
+            pointer-events: none;
+        }
 
         h1 {
             text-align: center;
             font-size: 1.8rem;
             margin-top: 0;
             margin-bottom: 1.5rem;
-           color: #c5a059; /* Color dorado */
-    font-family: 'Cinzel', serif;
-    text-transform: uppercase;
+            color: #c5a059;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
         }
 
         .form-group { margin-bottom: 1.5rem; }
@@ -100,7 +98,7 @@
         select, input {
             width: 100%;
             padding: 0.75rem;
-            background-color: #1e293b; /* Fondo oscuro para los inputs */
+            background-color: #1e293b;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             color: white;
@@ -168,7 +166,7 @@
 </head>
 <body>
 
-    <img src="https://media.tenor.com/a4gN5720Y7cAAAAi/yaeno-muteki-tweaking-umamusume.gif" class="corner-gif" alt="Decoración">
+    <img src="decoracion.gif" class="corner-gif" alt="Decoración">
 
     <div class="converter-card">
         <h1>Conversor de <br> unidades </h1>
