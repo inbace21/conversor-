@@ -9,12 +9,11 @@
     
     <style>
         :root {
-            --primary-color: #2563eb;
-            --background: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
+            --primary-color: #60a5fa; /* Un azul un poco más claro para que resalte en fondo negro */
+            --background: #0f172a;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --border-color: #475569;
         }
 
         body {
@@ -27,7 +26,6 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            background-color: var(--background); 
         }
 
         body::before {
@@ -44,7 +42,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Estilo para el GIF en la esquina */
         .corner-gif {
             position: fixed;
             bottom: 20px;
@@ -55,22 +52,23 @@
         }
 
         .converter-card {
-            background-color: rgba(255, 255, 255, 0.85);
+            background-color: rgba(0, 0, 0, 0.8); /* Fondo negro transparente */
+            color: white; /* Letras blancas */
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 600px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 {
             text-align: center;
-            font-size: 1.8rem; /* Un poco más grande para lucir la fuente */
+            font-size: 1.8rem;
             margin-top: 0;
             margin-bottom: 1.5rem;
             color: var(--primary-color);
-            /* Aplicación de la fuente Cinzel */
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
         }
@@ -81,23 +79,23 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            color: white;
         }
 
         select, input {
             width: 100%;
             padding: 0.75rem;
+            background-color: #1e293b; /* Fondo oscuro para los inputs */
             border: 1px solid var(--border-color);
             border-radius: 6px;
+            color: white;
             font-size: 1rem;
             box-sizing: border-box;
-            transition: border-color 0.2s;
         }
 
         select:focus, input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .conversion-row {
@@ -131,28 +129,25 @@
         }
 
         .unit-list li {
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.05);
             padding: 0.6rem;
             border-radius: 6px;
             font-size: 0.85rem;
             border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
         }
 
-        .unit-name { color: var(--text-muted); }
+        .unit-name { color: #94a3b8; }
         .unit-symbol {
             font-weight: bold;
             color: var(--primary-color);
-            font-size: 1rem;
+            display: block;
         }
 
         footer {
             margin-top: 2rem;
             text-align: center;
             font-size: 0.8rem;
-            color: var(--text-muted);
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -161,7 +156,7 @@
     <img src="https://media.tenor.com/a4gN5720Y7cAAAAi/yaeno-muteki-tweaking-umamusume.gif" class="corner-gif" alt="Decoración">
 
     <div class="converter-card">
-        <h1>CONVERSOR DE UNIDADES </h1>
+        <h1>Conversor del Sistema Internacional</h1>
         
         <div class="form-group">
             <label for="magnitude">Magnitud:</label>
