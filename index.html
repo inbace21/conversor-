@@ -14,7 +14,7 @@
             --border-color: #e2e8f0;
         }
 
-       body {
+        body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-main);
             display: flex;
@@ -27,7 +27,6 @@
             background-color: var(--background); 
         }
 
-        /* ✨ TRUCO PARA EL CELULAR: Capa fija para el fondo sin errores visuales ✨ */
         body::before {
             content: "";
             position: fixed;
@@ -35,12 +34,23 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Se asegura de quedar detrás de la tarjeta */
+            z-index: -1;
             background-image: url('https://s1.significados.com/foto/naturaleza-bosque-lago-cke.jpg?class=article'); 
             background-size: cover; 
             background-position: center; 
             background-repeat: no-repeat;
         }
+
+        /* Estilo para el GIF en la esquina */
+        .corner-gif {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
         .converter-card {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 2rem;
@@ -59,9 +69,7 @@
             color: var(--primary-color);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+        .form-group { margin-bottom: 1.5rem; }
 
         label {
             display: block;
@@ -92,9 +100,7 @@
             align-items: center;
         }
 
-        .conversion-col {
-            flex: 1;
-        }
+        .conversion-col { flex: 1; }
 
         .equals {
             font-size: 1.5rem;
@@ -103,18 +109,10 @@
             margin-top: 1.5rem;
         }
 
-        /* --- NUEVOS ESTILOS PARA LA LISTA DINÁMICA --- */
         .unit-info-container {
             margin-top: 2rem;
             padding-top: 1.5rem;
             border-top: 1px solid var(--border-color);
-        }
-
-        .unit-info-container h3 {
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-top: 0;
-            margin-bottom: 1rem;
         }
 
         .unit-list {
@@ -127,7 +125,7 @@
         }
 
         .unit-list li {
-            background-color: var(--background);
+            background-color: rgba(255, 255, 255, 0.5);
             padding: 0.6rem;
             border-radius: 6px;
             font-size: 0.85rem;
@@ -137,10 +135,7 @@
             gap: 0.2rem;
         }
 
-        .unit-name {
-            color: var(--text-muted);
-        }
-
+        .unit-name { color: var(--text-muted); }
         .unit-symbol {
             font-weight: bold;
             color: var(--primary-color);
@@ -157,8 +152,10 @@
 </head>
 <body>
 
+    <img src="https://tenor.com/es/view/yaeno-muteki-tweaking-umamusume-yaeno-muteki-gif-2402426570843035997" class="corner-gif" alt="Decoración">
+
     <div class="converter-card">
-        <h1>Conversor de unidades</h1>
+        <h1>Conversor de unidades </h1>
         
         <div class="form-group">
             <label for="magnitude">Magnitud:</label>
@@ -183,8 +180,7 @@
 
         <div class="unit-info-container">
             <h3>Unidades Disponibles:</h3>
-            <ul class="unit-list" id="unit-list">
-                </ul>
+            <ul class="unit-list" id="unit-list"></ul>
         </div>
 
         <footer>
@@ -193,35 +189,17 @@
     </div>
 
     <script>
-        // Diccionario de conversiones
         const conversionData = {
-            "Masa": {
-                "Ton": 1000, "Kg": 1, "g": 0.001, "mg": 0.000001, "ug": 0.000000001
-            },
-            "Volumen": {
-                "Gal": 3.78541, "m³": 1000, "L": 1, "mL": 0.001, "uL": 0.000001
-            },
-            "Distancia": {
-                "km": 1000, "m": 1, "cm": 0.01, "mm": 0.001, "Yarda": 0.9144, "pulgada": 0.0254
-            },
-            "Densidad": {
-                "Kg/m³": 1, "g/mL": 1000, "Kg/L": 1000, "g/L": 1
-            },
-            "Presión": {
-                "Atm": 101325, "Pa": 1, "mmHg": 133.322, "Torr": 133.322, "psi": 6894.76
-            },
-            "Tiempo": {
-                "hora": 3600, "min": 60, "s": 1
-            },
-            "Fuerza": {
-                "Kilonewton": 1000, "Newton": 1, "Micronewton": 0.000001, "Kilogramofuerza": 9.80665, "Dina": 0.00001
-            },
-            "Energía": {
-                "Kcal": 4.184, "KJ": 1
-            }
+            "Masa": { "Ton": 1000, "Kg": 1, "g": 0.001, "mg": 0.000001, "ug": 0.000000001 },
+            "Volumen": { "Gal": 3.78541, "m³": 1000, "L": 1, "mL": 0.001, "uL": 0.000001 },
+            "Distancia": { "km": 1000, "m": 1, "cm": 0.01, "mm": 0.001, "Yarda": 0.9144, "pulgada": 0.0254 },
+            "Densidad": { "Kg/m³": 1, "g/mL": 1000, "Kg/L": 1000, "g/L": 1 },
+            "Presión": { "Atm": 101325, "Pa": 1, "mmHg": 133.322, "Torr": 133.322, "psi": 6894.76 },
+            "Tiempo": { "hora": 3600, "min": 60, "s": 1 },
+            "Fuerza": { "Kilonewton": 1000, "Newton": 1, "Micronewton": 0.000001, "Kilogramofuerza": 9.80665, "Dina": 0.00001 },
+            "Energía": { "Kcal": 4.184, "KJ": 1 }
         };
 
-        // --- NUEVO: Diccionario para los nombres completos ---
         const unitNames = {
             "Ton": "Tonelada", "Kg": "Kilogramo", "g": "Gramo", "mg": "Miligramo", "ug": "Microgramo",
             "Gal": "Galón", "m³": "Metro cúbico", "L": "Litro", "mL": "Mililitro", "uL": "Microlitro",
@@ -238,9 +216,8 @@
         const unitToSelect = document.getElementById('unit-to');
         const inputValue = document.getElementById('input-value');
         const outputValue = document.getElementById('output-value');
-        const unitListContainer = document.getElementById('unit-list'); // Selector de la nueva lista
+        const unitListContainer = document.getElementById('unit-list');
 
-        // Inicializar magnitudes
         function init() {
             for (const mag in conversionData) {
                 const option = document.createElement('option');
@@ -252,75 +229,43 @@
             calculate();
         }
 
-        // Llenar los selects de unidades y actualizar la lista de información
         function populateUnits() {
             const selectedMag = magnitudeSelect.value;
             const units = Object.keys(conversionData[selectedMag]);
-            
             unitFromSelect.innerHTML = '';
             unitToSelect.innerHTML = '';
-            unitListContainer.innerHTML = ''; // Limpiar la lista inferior
+            unitListContainer.innerHTML = '';
 
             units.forEach((unit, index) => {
-                // Llenar selects
                 const option1 = document.createElement('option');
                 option1.value = unit;
                 option1.textContent = unit;
                 unitFromSelect.appendChild(option1);
-
                 const option2 = document.createElement('option');
                 option2.value = unit;
                 option2.textContent = unit;
                 if (index === 1 && units.length > 1) option2.selected = true; 
                 unitToSelect.appendChild(option2);
 
-                // --- NUEVO: Crear las tarjetas de información de unidades ---
                 const li = document.createElement('li');
-                const fullName = unitNames[unit] || unit; // Obtiene el nombre o usa el símbolo si no lo encuentra
-                
-                li.innerHTML = `
-                    <span class="unit-symbol">${unit}</span>
-                    <span class="unit-name">${fullName}</span>
-                `;
+                li.innerHTML = `<span class="unit-symbol">${unit}</span><span class="unit-name">${unitNames[unit] || unit}</span>`;
                 unitListContainer.appendChild(li);
             });
         }
 
-        // Realizar el cálculo
         function calculate() {
             const mag = magnitudeSelect.value;
-            const fromUnit = unitFromSelect.value;
-            const toUnit = unitToSelect.value;
             const val = parseFloat(inputValue.value);
-
-            if (isNaN(val)) {
-                outputValue.value = '';
-                return;
-            }
-
-            const fromFactor = conversionData[mag][fromUnit];
-            const toFactor = conversionData[mag][toUnit];
-
-            let result = (val * fromFactor) / toFactor;
-
-            if (result !== 0 && (result < 0.000001 || result > 999999999)) {
-                outputValue.value = result.toExponential(6);
-            } else {
-                outputValue.value = parseFloat(result.toFixed(6)); 
-            }
+            if (isNaN(val)) { outputValue.value = ''; return; }
+            const result = (val * conversionData[mag][unitFromSelect.value]) / conversionData[mag][unitToSelect.value];
+            outputValue.value = (result % 1 === 0) ? result : result.toFixed(6);
         }
 
-        // Event Listeners
-        magnitudeSelect.addEventListener('change', () => {
-            populateUnits();
-            calculate();
-        });
-
+        magnitudeSelect.addEventListener('change', () => { populateUnits(); calculate(); });
         unitFromSelect.addEventListener('change', calculate);
         unitToSelect.addEventListener('change', calculate);
         inputValue.addEventListener('input', calculate);
 
-        // Arrancar la app
         init();
     </script>
 </body>
