@@ -41,7 +41,6 @@
             background-repeat: no-repeat;
         }
 
-        /* --- ESTILO DE MARCO ELEGANTE --- */
         .converter-card {
             background-color: #0d1117;
             padding: 2.5rem;
@@ -54,7 +53,6 @@
             position: relative;
         }
         
-        /* Estrellas decorativas */
         .converter-card::before, 
         .converter-card::after {
             content: "✦";
@@ -66,7 +64,7 @@
         .converter-card::before { top: 10px; }
         .converter-card::after { bottom: 10px; }
 
-        /* Estilo para el GIF local */
+        /* Estilo para el GIF */
         .corner-gif {
             position: fixed;
             bottom: 20px;
@@ -75,18 +73,18 @@
             z-index: 1000;
             pointer-events: none;
         }
-        /* Estilo para celulares (pantallas pequeñas) */
-@media (max-width: 600px) {
-    .corner-gif {
-        position: static; /* Deja de estar "flotando" y se coloca en el flujo normal */
-        margin-top: 20px; /* Un poco de espacio respecto a la tarjeta */
-        margin-bottom: 20px;
-        width: 100px;     /* Opcional: lo hacemos un poquito más chico */
-        display: block;   /* Para que se centre solo */
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
+
+        /* Estilo para celulares: se quita el fixed y se centra */
+        @media (max-width: 600px) {
+            .corner-gif {
+                position: static; 
+                margin-top: 20px; 
+                width: 100px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
 
         h1 {
             text-align: center;
@@ -178,8 +176,6 @@
 </head>
 <body>
 
-    <img src="decoracion.gif" class="corner-gif" alt="Decoración">
-
     <div class="converter-card">
         <h1>Conversor de <br> unidades </h1>
         
@@ -213,6 +209,8 @@
             Trabajo de Aplicación - Tema 1: Sistema internacional de medidas
         </footer>
     </div>
+
+    <img src="decoracion.gif" class="corner-gif" alt="Decoración">
 
     <script>
         const conversionData = {
@@ -294,5 +292,7 @@
 
         init();
     </script>
+</body>
+</html>
 </body>
 </html>
