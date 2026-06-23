@@ -75,6 +75,18 @@
             z-index: 1000;
             pointer-events: none;
         }
+        /* Estilo para celulares (pantallas pequeñas) */
+@media (max-width: 600px) {
+    .corner-gif {
+        position: static; /* Deja de estar "flotando" y se coloca en el flujo normal */
+        margin-top: 20px; /* Un poco de espacio respecto a la tarjeta */
+        margin-bottom: 20px;
+        width: 100px;     /* Opcional: lo hacemos un poquito más chico */
+        display: block;   /* Para que se centre solo */
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 
         h1 {
             text-align: center;
