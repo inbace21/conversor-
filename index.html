@@ -42,14 +42,21 @@
         }
 
         /* Estilo para el GIF en la esquina */
-       .corner-gif {
+.corner-gif {
     position: fixed;
     bottom: 20px;
     right: 20px;
     width: 120px;
-    z-index: 9999; /* Aumentado para asegurar que esté encima de todo */
+    height: 120px;
+    z-index: 9999;
     pointer-events: none;
-    display: block; /* Asegura que el navegador lo renderice como elemento visual */
+    border: none;
+}
+
+.corner-gif iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
         .converter-card {
