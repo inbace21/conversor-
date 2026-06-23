@@ -8,7 +8,6 @@
         :root {
             --primary-color: #2563eb;
             --background: #f8fafc;
-            --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
@@ -24,40 +23,26 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            background-color: var(--background); 
-        }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: url('https://s1.significados.com/foto/naturaleza-bosque-lago-cke.jpg?class=article'); 
+            /* --- CONFIGURACIÓN DEL FONDO --- */
+            background-color: var(--background); 
+            /* 👇 RECUERDA PONER EL ENLACE O NOMBRE DE TU IMAGEN AQUÍ 👇 */
+            background-image: url('PON_AQUI_LA_URL_DE_TU_IMAGEN_DE_MONTANAS'); 
             background-size: cover; 
             background-position: center; 
-            background-repeat: no-repeat;
-        }
-
-        /* Estilo para que el GIF de Tenor se quede en la esquina */
-        .tenor-gif-embed {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            pointer-events: none;
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
         }
 
         .converter-card {
-            background-color: rgba(255, 255, 255, 0.85);
+            /* --- AQUÍ ESTÁ EL FONDO BLANCO SOLUCIONADO --- */
+            background-color: rgba(255, 255, 255, 0.90);
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
             width: 100%;
-            max-width: 600px;
-            backdrop-filter: blur(5px);
+            max-width: 500px;
+            backdrop-filter: blur(4px);
         }
 
         h1 {
@@ -68,7 +53,9 @@
             color: var(--primary-color);
         }
 
-        .form-group { margin-bottom: 1.5rem; }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
         label {
             display: block;
@@ -99,7 +86,9 @@
             align-items: center;
         }
 
-        .conversion-col { flex: 1; }
+        .conversion-col {
+            flex: 1;
+        }
 
         .equals {
             font-size: 1.5rem;
@@ -114,6 +103,13 @@
             border-top: 1px solid var(--border-color);
         }
 
+        .unit-info-container h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
         .unit-list {
             list-style: none;
             padding: 0;
@@ -124,7 +120,7 @@
         }
 
         .unit-list li {
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.7);
             padding: 0.6rem;
             border-radius: 6px;
             font-size: 0.85rem;
@@ -134,7 +130,10 @@
             gap: 0.2rem;
         }
 
-        .unit-name { color: var(--text-muted); }
+        .unit-name {
+            color: var(--text-muted);
+        }
+
         .unit-symbol {
             font-weight: bold;
             color: var(--primary-color);
@@ -151,12 +150,8 @@
 </head>
 <body>
 
-    <div class="tenor-gif-embed" data-postid="14908482199493936541" data-share-method="host" data-aspect-ratio="1" data-width="120px">
-        <a href="https://tenor.com/view/yaeno-muteki-uma-musume-muteki-tweaking-coolchowzhao-gif-14908482199493936541">Yaeno Muteki Uma Musume GIF</a>
-    </div>
-    
     <div class="converter-card">
-        <h1>Conversor de unidades</h1>
+        <h1>Conversor del Sistema Internacional</h1>
         
         <div class="form-group">
             <label for="magnitude">Magnitud:</label>
@@ -181,7 +176,8 @@
 
         <div class="unit-info-container">
             <h3>Unidades Disponibles:</h3>
-            <ul class="unit-list" id="unit-list"></ul>
+            <ul class="unit-list" id="unit-list">
+            </ul>
         </div>
 
         <footer>
@@ -233,6 +229,7 @@
         function populateUnits() {
             const selectedMag = magnitudeSelect.value;
             const units = Object.keys(conversionData[selectedMag]);
+            
             unitFromSelect.innerHTML = '';
             unitToSelect.innerHTML = '';
             unitListContainer.innerHTML = '';
@@ -242,6 +239,7 @@
                 option1.value = unit;
                 option1.textContent = unit;
                 unitFromSelect.appendChild(option1);
+
                 const option2 = document.createElement('option');
                 option2.value = unit;
                 option2.textContent = unit;
@@ -249,13 +247,47 @@
                 unitToSelect.appendChild(option2);
 
                 const li = document.createElement('li');
-                li.innerHTML = `<span class="unit-symbol">${unit}</span><span class="unit-name">${unitNames[unit] || unit}</span>`;
+                const fullName = unitNames[unit] || unit; 
+                
+                li.innerHTML = `
+                    <span class="unit-symbol">${unit}</span>
+                    <span class="unit-name">${fullName}</span>
+                `;
                 unitListContainer.appendChild(li);
             });
         }
 
         function calculate() {
             const mag = magnitudeSelect.value;
+            const fromUnit = unitFromSelect.value;
+            const toUnit = unitToSelect.value;
             const val = parseFloat(inputValue.value);
-            if (isNaN(val)) { outputValue.value = ''; return; }
-            const result = (val * conversionData[mag
+
+            if (isNaN(val)) {
+                outputValue.value = '';
+                return;
+            }
+
+            const fromFactor = conversionData[mag][fromUnit];
+            const toFactor = conversionData[mag][toUnit];
+            let result = (val * fromFactor) / toFactor;
+
+            if (result !== 0 && (result < 0.000001 || result > 999999999)) {
+                outputValue.value = result.toExponential(6);
+            } else {
+                outputValue.value = parseFloat(result.toFixed(6)); 
+            }
+        }
+
+        magnitudeSelect.addEventListener('change', () => {
+            populateUnits();
+            calculate();
+        });
+        unitFromSelect.addEventListener('change', calculate);
+        unitToSelect.addEventListener('change', calculate);
+        inputValue.addEventListener('input', calculate);
+
+        init();
+    </script>
+</body>
+</html>
