@@ -58,23 +58,24 @@
             position: relative; /* Importante para posicionar adornos */
         }
         
-        /* Opcional: Adorno elegante arriba y abajo usando pseudo-elementos */
-    .converter-card::before {
-            content: "✦";
-            position: absolute;
-            top: 10px;
-            left: 20px; /* Cambia este número para moverla más o menos */
-            color: #c5a059;
-            font-size: 1.5rem;
-        }
-        
-        .converter-card::after {
-            content: "✦";
-            position: absolute;
-            bottom: 15px;
-            color: #c5a059;
-            font-size: 1.5rem;
-        }
+    /* Esto controla ambas estrellas al mismo tiempo */
+.converter-card::before, 
+.converter-card::after {
+    content: "✦";
+    position: absolute;
+    left: 20px; /* Ajusta aquí la posición a la izquierda */
+    color: #c5a059;
+    font-size: 1.5rem;
+}
+
+/* Posición específica para cada una */
+.converter-card::before {
+    top: 10px; /* Estrella superior */
+}
+
+.converter-card::after {
+    bottom: 10px; /* Estrella inferior */
+}
         /* ------------------------------------------- */
 
         h1 {
